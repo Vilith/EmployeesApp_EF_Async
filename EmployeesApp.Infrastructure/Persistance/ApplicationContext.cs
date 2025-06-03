@@ -14,6 +14,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
     : DbContext(options)
 {
     public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Company> Companies { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,6 +32,9 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
             .HasDefaultValue(0m)
             .IsRequired();
 
+        modelBuilder.Entity<Company>()
+            .HasData(new Company { Id = 9817, Name = "ACME" }, new Company { Id = 9898, Name = "EMCA" });
+
 
         modelBuilder.Entity<Employee>().HasData(
             new Employee()
@@ -38,18 +42,22 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
                 Id = 562,
                 Name = "Anders Hejlsberg",
                 Email = "Anders.Hejlsberg@outlook.com",
+                CompanyID = 9817, // Foreign key to Company
             },
             new Employee()
             {
                 Id = 62,
                 Name = "Kathleen Dollard",
                 Email = "k.d@outlook.com",
+                CompanyID = 9817, // Foreign key to Company
             },
             new Employee()
             {
                 Id = 15662,
                 Name = "Mads Torgersen",
                 Email = "Admin.Torgersen@outlook.com",
+                CompanyID = 9898, // Foreign key to Company
+
             });
     }
 }

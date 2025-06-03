@@ -1,4 +1,6 @@
-﻿namespace EmployeesApp.Web.Views.Employees
+﻿using EmployeesApp.Domain.Entities;
+
+namespace EmployeesApp.Web.Views.Employees
 {
     public class IndexVM
     {
@@ -9,6 +11,7 @@
             public required int Id { get; set; }
             public required string Name { get; set; }
             public required bool ShowAsHighlighted { get; set; }
+            public Company? Company { get; set; } = null!; // Navigation property for Company
         }
     }
 }

@@ -18,8 +18,8 @@ public class EmployeesControllerTests
     {
         //Arrange
         var employeeService = new Mock<IEmployeeService>();
-        employeeService.Setup(service => service.GetAll())
-            .Returns([
+        employeeService.Setup(service => service.GetAllAsync())
+            .ReturnsAsync([
                 new Employee{Email = "gmail@gmail.com", Name = "Pär"},
                 new Employee{Email = "email@email.com", Name = "Name"},
                 new Employee{Email = "hotmail@hotmail.com", Name = "Namn"}
@@ -27,7 +27,7 @@ public class EmployeesControllerTests
         var employeeController = new EmployeesController(employeeService.Object);
 
         //Act
-        var result = employeeController.Index();
+        var result = employeeController.IndexAsync();
 
         //Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -50,8 +50,8 @@ public class EmployeesControllerTests
         if (expected)
         {
             var redirect = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal(nameof(EmployeesController.Index), redirect.ActionName);
-            mockService.Verify(s => s.Add(It.Is<Employee>(e =>
+            Assert.Equal(nameof(EmployeesController.IndexAsync), redirect.ActionName);
+            mockService.Verify(s => s.AddAsync(It.Is<Employee>(e =>
                 e.Email == email &&
                 e.Name == name)), Times.Once);
         }
@@ -59,7 +59,7 @@ public class EmployeesControllerTests
         {
             var view = Assert.IsType<ViewResult>(result);
             Assert.Null(view.ViewName);
-            mockService.Verify(s => s.Add(It.IsAny<Employee>()), Times.Never);
+            mockService.Verify(s => s.AddAsync(It.IsAny<Employee>()), Times.Never);
         }
     }
 
@@ -97,14 +97,14 @@ public class EmployeesControllerTests
         };
 
         employeeService
-            .Setup(service => service.GetById(1))
-            .Returns(employee);
+            .Setup(service => service.GetByIdAsync(1))
+            .ReturnsAsync(employee);
 
         //Act
-        var result = employeeController.Details(1);
+        var result = employeeController.DetailsAsync(1);
 
         //Assert
         Assert.IsType<ViewResult>(result);
-        employeeService.Verify(s => s.GetById(1), Times.Once);
+        employeeService.Verify(s => s.GetByIdAsync(1), Times.Once);
     }
 }

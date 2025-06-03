@@ -5,24 +5,27 @@ namespace EmployeesApp.Application.Employees.Services;
 
 public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployeeService
 {
-    public void Add(Employee employee)
+    public async Task AddAsync(Employee employee)
     {
         employee.Name = ToInitalCapital(employee.Name);
         employee.Email = employee.Email.ToLower();
-        employeeRepository.AddAsync(employee);
+        await employeeRepository.AddAsync(employee);
     }
 
     string ToInitalCapital(string s) => $"{s[..1].ToUpper()}{s[1..]}";
 
-    public Employee[] GetAll() => [.. employeeRepository.GetAllAsync().OrderBy(e => e.Name)];
-
-    public Employee? GetById(int id)
+    public async Task<Employee[]> GetAllAsync()
     {
-        Employee? employee = employeeRepository.GetByIdAsync(id);
+        var employees = await employeeRepository.GetAllAsync();
+        return employees.OrderBy(e => e.Name).ToArray();
+    }
 
-        return employee is null ?
-            throw new ArgumentException($"Invalid parameter value: {id}", nameof(id)) :
-            employee;
+    public async Task<Employee?> GetByIdAsync(int id)
+    {
+        var employee = await employeeRepository.GetByIdAsync(id);
+
+        return employee ?? throw new ArgumentException($"Invalid parameter value: {id}", nameof(id));
+            
     }
 
     public bool CheckIsVIP(Employee employee) =>
