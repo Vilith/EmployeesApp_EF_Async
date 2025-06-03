@@ -24,7 +24,7 @@ public class EmployeeServiceTests
         service.Add(employee);
 
         // Assert
-        mockRepo.Verify(o => o.Add(It.Is<Employee>(o =>
+        mockRepo.Verify(o => o.AddAsync(It.Is<Employee>(o =>
             o.Name == "Lisa" &&
             o.Email == "lisa@ajax.com")), Times.Once);
     }
@@ -36,7 +36,7 @@ public class EmployeeServiceTests
         var employee = new Employee { Id = 1, Name = "Ben", Email = "dover@hotmale.com" };
         var mockRepo = new Mock<IEmployeeRepository>();
         mockRepo
-            .Setup(r => r.GetById(1))
+            .Setup(r => r.GetByIdAsync(1))
             .Returns(employee);
 
         var service = new EmployeeService(mockRepo.Object);
@@ -54,7 +54,7 @@ public class EmployeeServiceTests
         // Arrange
         var mockRepo = new Mock<IEmployeeRepository>();
         mockRepo
-            .Setup(r => r.GetById(999))
+            .Setup(r => r.GetByIdAsync(999))
             .Returns((Employee?)null);
 
         var service = new EmployeeService(mockRepo.Object);

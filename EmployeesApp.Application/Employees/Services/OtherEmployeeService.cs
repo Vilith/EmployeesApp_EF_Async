@@ -7,15 +7,15 @@ public class OtherEmployeeService(IEmployeeRepository employeeRepository) : IEmp
 {
     public void Add(Employee employee)
     {
-        employeeRepository.Add(employee);
+        employeeRepository.AddAsync(employee);
     }
 
     public Employee[] GetAll()
     {
-        return employeeRepository.GetAll();
+        return employeeRepository.GetAllAsync();
     }
 
-    public Employee? GetById(int id) => employeeRepository.GetById(id);
+    public Employee? GetById(int id) => employeeRepository.GetByIdAsync(id);
 
     public bool CheckIsVIP(Employee employee) =>
         employee.Email.StartsWith("ADMIN", StringComparison.CurrentCultureIgnoreCase);

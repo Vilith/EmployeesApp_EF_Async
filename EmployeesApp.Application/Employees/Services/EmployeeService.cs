@@ -9,16 +9,16 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
     {
         employee.Name = ToInitalCapital(employee.Name);
         employee.Email = employee.Email.ToLower();
-        employeeRepository.Add(employee);
+        employeeRepository.AddAsync(employee);
     }
 
     string ToInitalCapital(string s) => $"{s[..1].ToUpper()}{s[1..]}";
 
-    public Employee[] GetAll() => [.. employeeRepository.GetAll().OrderBy(e => e.Name)];
+    public Employee[] GetAll() => [.. employeeRepository.GetAllAsync().OrderBy(e => e.Name)];
 
     public Employee? GetById(int id)
     {
-        Employee? employee = employeeRepository.GetById(id);
+        Employee? employee = employeeRepository.GetByIdAsync(id);
 
         return employee is null ?
             throw new ArgumentException($"Invalid parameter value: {id}", nameof(id)) :
